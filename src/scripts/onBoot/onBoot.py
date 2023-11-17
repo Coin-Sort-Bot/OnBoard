@@ -1,17 +1,11 @@
 import socket
-import urllib.request
+import requests
 import json
 
 
 def push_ip():
     with open("config.json", "r") as file:
         config = json.load(file)
-
-    url = config["discord_webhook_url"]
-
-    headers = {
-        "Content-Type": "application/json",
-    }
 
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         s.connect(("8.8.8.8", 80))
@@ -20,14 +14,11 @@ def push_ip():
     content = {
         "content": f"I'm alive!!! My IP is **{local_ip}**",
     }
-
-    data = json.dumps(content).encode("utf-8")
-
-    request = urllib.request.Request(url, data=data, headers=headers, method="POST")
-
-    with urllib.request.urlopen(request) as response:
-        response_data = response.read()
-        print(response_data.decode("utf-8"))
+    url = config["discord_webhook_url"]
+    headers = {
+        "Content-Type": "application/json",
+    }
+    requests.push(url, json=content, headers=headers)
 
 
 def on_boot():
