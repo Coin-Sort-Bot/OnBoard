@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from adafruit_servokit import ServoKit
@@ -124,6 +125,43 @@ class Servos:
 
         logger.info("Set servo %s to angle %sdeg", servo, angle)
         self.servos[servo].set(angle)
+
+    async def toggle_servos(self, servos: list[int] = None, angle: int = None):
+        """
+        Toggle all servos in a list between the active angle and the neutral angle, or
+        to a custom angle if one is given.
+
+        Arguments:
+            servos: A list of servos to toggle. If no servos are given then all servos
+                will be toggled.
+            angle: The angle to set the servos to. If no angle is given then the servos
+                will be toggled between the active angle and the neutral angle.
+        """
+        # If no servos are given then toggle all servos
+        if servos is None:
+            servos = self.servos.keys()
+
+        # Concurrently toggle all servos
+        async with asyncio.TaskGroup() as task_group:
+            for servo in servos:
+                task_group.create_task(self.toggle_servo(servo, angle))
+
+    async def reset_servos(self, servos: list[int] = None):
+        """
+        Reset all servos to their neutral angles.
+
+        Arguments:
+            servos: A list of servos to reset. If no servos are given then all servos
+                will be reset.
+        """
+        # Select all servos if no servo list is given
+        if servos is None:
+            servos = self.servos.keys()
+
+        # Concurrently reset all servos
+        async with asyncio.TaskGroup() as task_group:
+            for servo in servos:
+                task_group.create_task(self.toggle_servo(servo, self.neutral_angle))
 
     class ServoDoesntExist(Exception):
         """An exception for trying to manipulate a servo that does not exist."""

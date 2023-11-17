@@ -1,5 +1,5 @@
-from src.coinbot.hardware.motor import Motor
-from src.coinbot.hardware.servos import Servos
+from src.main.hardware.motor import Motor
+from src.main.hardware.servos import Servos
 
 
 class CoinBot:
