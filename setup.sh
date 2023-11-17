@@ -1,2 +1,3 @@
 sudo apt-get update
-sudo apt-get -y install python3-rpi.gpio
+sudo apt-get install python3-smbus
+sudo apt-get install i2c-tools
