@@ -1,5 +1,7 @@
 import argparse
 import socket
+from time import sleep
+
 import requests
 import json
 
@@ -15,7 +17,10 @@ def push_ip(webhook_url):
     headers = {
         "Content-Type": "application/json",
     }
-    requests.post(webhook_url, json=content, headers=headers)
+    status = 400
+    while status != 200:
+        status = requests.post(webhook_url, json=content, headers=headers).status_code
+        sleep(2)
 
 
 if __name__ == "__main__":
