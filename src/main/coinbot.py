@@ -26,5 +26,5 @@ class CoinBot:
             self.motor = Motor(
                 port=1,
                 released=True,
-                address=0x40,
+                address=0x60,
             )
