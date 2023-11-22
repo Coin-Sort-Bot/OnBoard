@@ -1,13 +1,13 @@
 import asyncio
 
-from src.main.coinbot import CoinBot
+from main.coinbot import CoinBot
 
 
 async def main():
     coinbot = CoinBot()
-    coinbot.motor.set_speed(100)
+    coinbot.motor.start_spinning(100)
     await asyncio.sleep(5)
-    coinbot.motor.set_speed(0)
+    coinbot.motor.stop_spinning()
 
 
 if __name__ == "__main__":

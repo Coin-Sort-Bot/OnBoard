@@ -1,4 +1,5 @@
 import asyncio
+import atexit
 import logging
 from time import time
 from typing import Literal
@@ -54,9 +55,12 @@ class Motor:
 
         # Set the initial lock state of the motor
         if released:
-            self.release_motor()
+            asyncio.run(self.release_motor())
         else:
-            self.lock_motor()
+            asyncio.run(self.lock_motor(set_timeout=False))
+
+        # Ensure the motor is released when the program exits
+        atexit.register(self.release_motor)
 
     @property
     def locked(self):
@@ -96,13 +100,14 @@ class Motor:
             self._ongoing_active_timeout.cancel()
         self._ongoing_active_timeout = asyncio.create_task(_active_timeout())
 
-    async def lock_motor(self, step_motor: bool = True):
+    async def lock_motor(self, step_motor: bool = True, set_timeout: bool = True):
         """Lock the motor so that it stays in place."""
         if step_motor:
             self.motor.onestep(direction=stepper.FORWARD, style=stepper.MICROSTEP)
             self.motor.onestep(direction=stepper.BACKWARD, style=stepper.MICROSTEP)
         self._locked = True
-        await self.set_active_timeout()
+        if set_timeout:
+            await self.set_active_timeout()
         logger.info("Locked motor position")
 
     async def release_motor(self):
@@ -160,7 +165,7 @@ class Motor:
             await self.stop_spinning()
             await self.lock_motor()
 
-        sleep_amount = 1 - ((abs(speed) - 100) / 100)
+        sleep_amount = ((abs(speed) - 100) / 100)
         logger.debug("Sleep amount between steps set to %ss", sleep_amount)
 
         # Create a task to spin the motor in the background at the given speed.
