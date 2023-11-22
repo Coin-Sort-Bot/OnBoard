@@ -45,13 +45,15 @@ class Motor:
         self._auto_unlock = auto_unlock
         self._auto_unlock_duration = auto_unlock_duration
         self.kit = MotorKit(address=address)
+        self.address = address
+        self.port = port
 
         # Assign the motor port based on its address
-        if address not in (0, 1):
+        if port not in (0, 1):
             raise ValueError(
                 f"Address {port} is invalid. The address must be either 0 or 1."
             )
-        self.motor = getattr(self.kit, f"stepper{address}")
+        self.motor = getattr(self.kit, f"stepper{port}")
 
         # Set the initial lock state of the motor
         if released:
