@@ -57,9 +57,9 @@ class Motor:
 
         # Set the initial lock state of the motor
         if released:
-            asyncio.run(self.release_motor())
+            asyncio.get_event_loop().create_task(self.release_motor())
         else:
-            asyncio.run(self.lock_motor(set_timeout=False))
+            asyncio.get_event_loop().create_task(self.lock_motor(set_timeout=False))
 
         # Ensure the motor is released when the program exits
         atexit.register(self.release_motor)
