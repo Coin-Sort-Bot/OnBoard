@@ -62,7 +62,7 @@ class Motor:
             asyncio.get_event_loop().create_task(self.lock_motor(set_timeout=False))
 
         # Ensure the motor is released when the program exits
-        atexit.register(self.release_motor)
+        atexit.register(self.motor.release)
 
     @property
     def locked(self):
@@ -114,7 +114,7 @@ class Motor:
 
     async def release_motor(self):
         """Release the motor to let it freely spin without consuming power."""
-        self.motor.release_motor()
+        self.motor.release()
         self._locked = False
         logger.info("Released motor")
 
