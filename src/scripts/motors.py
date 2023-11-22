@@ -1,4 +1,4 @@
-from time import sleep, time
+from time import time
 
 from adafruit_motorkit import MotorKit
 from adafruit_motor import stepper
