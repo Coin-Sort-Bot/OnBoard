@@ -5,9 +5,10 @@ from main.coinbot import CoinBot
 
 async def main():
     coinbot = CoinBot(servos=False)
-    coinbot.motor.start_spinning(100)
+    await coinbot.motor.start_spinning(100)
+    await coinbot.motor.step_motor(-100)
     await asyncio.sleep(5)
-    coinbot.motor.stop_spinning()
+    await coinbot.motor.stop_spinning()
 
 
 if __name__ == "__main__":

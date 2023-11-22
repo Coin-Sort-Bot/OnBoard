@@ -1,3 +1,4 @@
 adafruit-circuitpython-servokit
 adafruit-circuitpython-motorkit
 fake-rpi
+aiohttp
