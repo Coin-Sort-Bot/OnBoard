@@ -5,10 +5,6 @@ from adafruit_motor import stepper
 
 kit = MotorKit()
 
-#for i in range(100):
-#	kit.stepper1.onestep()
-#	sleep(.1
-
 startTime = time()
 
 while time() < startTime + 5:
