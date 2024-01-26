@@ -1,4 +1,5 @@
 adafruit-circuitpython-servokit
 adafruit-circuitpython-motorkit
-rpi-gpio==0.6.5
+rpi-gpio
 aiohttp
+opencv-python

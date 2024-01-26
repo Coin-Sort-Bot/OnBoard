@@ -16,7 +16,6 @@ class Servo:
         self,
         id_: int,
         servo: AdafruitServo,
-        actuation_range: tuple[int, int] = (0, 180),
     ):
         """
         Initialize the servo.
@@ -24,14 +23,9 @@ class Servo:
         Arguments:
             id_: An identifier for the servo.
             servo: The Adafruit servo object.
-            actuation_range: The range of angles the servo can be set to.
         """
-        self.id = id
+        self.id = id_
         self.servo = servo
-        servo.actuation_range = actuation_range
-        logger.debug(
-            "Instantiated servo %s with activation range %s", self.id, actuation_range
-        )
 
     def set(self, angle: int):
         """
@@ -61,7 +55,6 @@ class Servos:
         neutral_angle: int,
         connections: list[int],
         address: int,
-        actuation_range: tuple[int, int] = (0, 180),
     ):
         """
         A class to represent all servos connected to the bot.
@@ -73,12 +66,10 @@ class Servos:
                 the servos are connected to pins 0, 1, and 2, then connections should be
                 [0, 1, 2].
             address: The address of the servo hat. This is a hexadecimal number.
-            actuation_range: The range of angles the servo can be set to.
         """
         self.kit = ServoKit(channels=16, address=address)
         self.active_angle = active_angle
         self.neutral_angle = neutral_angle
-        self.actuation_range = actuation_range
 
         # Map ports servos are connected to to servo instances, and if there are any
         # invalid mappings throw an exception.
@@ -120,7 +111,7 @@ class Servos:
                 angle = self.neutral_angle
 
         # If the angle that the servo is to be moved to is not valid throw an error
-        if angle < self.actuation_range[0] or angle > self.actuation_range[1]:
+        if angle < 0 or angle > 180:
             raise Servo.InvalidAngle(angle, self.servos[servo])
 
         logger.info("Set servo %s to angle %sdeg", servo, angle)
@@ -137,6 +128,8 @@ class Servos:
             angle: The angle to set the servos to. If no angle is given then the servos
                 will be toggled between the active angle and the neutral angle.
         """
+        angle = angle or self.active_angle
+
         # If no servos are given then toggle all servos
         if servos is None:
             servos = self.servos.keys()
