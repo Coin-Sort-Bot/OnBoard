@@ -21,7 +21,7 @@ class Motor:
     def __init__(
         self,
         address: int,
-        port: int,
+        port: int | str,
         released: bool,
         auto_unlock: bool = True,
         auto_unlock_duration: float = motor_timeout_duration

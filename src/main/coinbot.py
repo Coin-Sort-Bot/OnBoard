@@ -20,6 +20,7 @@ class CoinBot:
         self.motor = None
         self.cameras = None
 
+    async def setup(self, servos: bool = True, motor: bool = True, cameras: bool = True):
         if servos:
             self._setup_servos()
 

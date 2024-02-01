@@ -1,5 +1,6 @@
+RPi.GPIO
 adafruit-circuitpython-servokit
 adafruit-circuitpython-motorkit
-rpi-gpio
 aiohttp
 opencv-python
+python-dotenv
